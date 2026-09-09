@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
+ROOT="$(cd "$(dirname "$SCRIPT_PATH")/.." && pwd)"
+BIN="$ROOT/codex-rs/target/debug/codex"
+
+if [[ ! -x "$BIN" ]]; then
+    echo "Reliable Research binary not found."
+    echo "Build it with:"
+    echo "  cd \"$ROOT/codex-rs\" && cargo build --bin codex"
+    exit 1
+fi
+
+exec "$BIN" "$@"

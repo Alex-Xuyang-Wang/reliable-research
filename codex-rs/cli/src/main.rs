@@ -111,20 +111,20 @@ use codex_protocol::protocol::AskForApproval;
 use codex_protocol::user_input::UserInput;
 use codex_terminal_detection::TerminalName;
 
-/// Codex CLI
+/// Reliable Research CLI
 ///
 /// If no subcommand is specified, options will be forwarded to the interactive CLI.
 #[derive(Debug, Parser)]
 #[clap(
+    name = "reliable-research",
     author,
     version,
-    // If a sub‑command is given, ignore requirements of the default args.
+    // If a sub-command is given, ignore requirements of the default args.
     subcommand_negates_reqs = true,
-    // The executable is sometimes invoked via a platform‑specific name like
-    // `codex-x86_64-unknown-linux-musl`, but the help output should always use
-    // the generic `codex` command name that users run.
-    bin_name = "codex",
-    override_usage = "codex [OPTIONS] [PROMPT]\n       codex [OPTIONS] <COMMAND> [ARGS]"
+    // The executable is sometimes invoked via a platform-specific internal name,
+    // but the help output should use the public Reliable Research command name.
+    bin_name = "reliable-research",
+    override_usage = "reliable-research [OPTIONS] [PROMPT]\n       reliable-research [OPTIONS] <COMMAND> [ARGS]"
 )]
 struct MultitoolCli {
     #[clap(flatten)]
@@ -148,7 +148,7 @@ enum Subcommand {
     /// Browse all agent sessions on the shared local app-server daemon.
     Agents(AgentsCommand),
 
-    /// Run Codex non-interactively.
+    /// Run Reliable Research non-interactively.
     #[clap(visible_alias = "e")]
     Exec(ExecCli),
 
@@ -161,10 +161,10 @@ enum Subcommand {
     /// Remove stored authentication credentials.
     Logout(LogoutCommand),
 
-    /// Manage external MCP servers for Codex.
+    /// Manage external MCP servers for Reliable Research.
     Mcp(McpCli),
 
-    /// Manage Codex plugins.
+    /// Manage Reliable Research plugins.
     Plugin(PluginCli),
 
     /// [experimental] Run the app server or related tooling.
@@ -183,10 +183,10 @@ enum Subcommand {
     /// Update Codex to the latest version.
     Update,
 
-    /// Diagnose local Codex installation, config, auth, and runtime health.
+    /// Diagnose local Reliable Research installation, config, auth, and runtime health.
     Doctor(DoctorCommand),
 
-    /// Run commands within a Codex-provided sandbox.
+    /// Run commands within a Reliable Research-provided sandbox.
     Sandbox(HostSandboxArgs),
 
     /// Debugging tools.
@@ -196,7 +196,7 @@ enum Subcommand {
     #[clap(hide = true)]
     Execpolicy(ExecpolicyCommand),
 
-    /// Apply the latest diff produced by Codex agent as a `git apply` to your local working tree.
+    /// Apply the latest diff produced by Reliable Research agent as a `git apply` to your local working tree.
     #[clap(visible_alias = "a")]
     Apply(ApplyCommand),
 

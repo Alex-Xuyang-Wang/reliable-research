@@ -1,10 +1,9 @@
 name: postmerge-ci
 
-# This is the single entrypoint for main-only CI that is intentionally outside
-# the merge-blocking suite. It keeps the broader postmerge signal in one run.
+# Upstream Codex post-merge compatibility CI.
+# Run manually when broader upstream validation is needed.
 on:
-  push:
-    branches: [main]
+  workflow_dispatch: {}
 
 jobs:
   # Keep reusable workflow calls alphabetized. Each child retains its own

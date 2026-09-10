@@ -180,7 +180,7 @@ enum Subcommand {
     /// Generate shell completion scripts.
     Completion(CompletionCommand),
 
-    /// Update Codex to the latest version.
+    /// Show instructions for updating Reliable Research from the upstream Codex repository.
     Update,
 
     /// Diagnose local Reliable Research installation, config, auth, and runtime health.
@@ -962,6 +962,18 @@ fn resolve_windows_update_command_from_path(
 }
 
 fn run_update_command() -> anyhow::Result<()> {
+    if std::env::var_os("RELIABLE_RESEARCH_DOWNSTREAM").is_some() {
+        anyhow::bail!(
+            "Automatic self-update is disabled for Reliable Research.\n\
+             Update this downstream harness through Git instead:\n\
+             1. git fetch upstream\n\
+             2. create a sync/upstream-YYYY-MM-DD branch from main\n\
+             3. merge upstream/main into that branch\n\
+             4. build and validate the harness\n\
+             5. merge the validated sync branch into main"
+        );
+    }
+
     #[cfg(debug_assertions)]
     {
         anyhow::bail!(

@@ -12,4 +12,5 @@ if [[ ! -x "$BIN" ]]; then
     exit 1
 fi
 
+export RELIABLE_RESEARCH_DOWNSTREAM=1
 exec "$BIN" "$@"

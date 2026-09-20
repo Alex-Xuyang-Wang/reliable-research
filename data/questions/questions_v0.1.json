@@ -1,0 +1,55 @@
+{
+  "benchmark_id": "reliable-research-v0.1",
+  "domain": "AI-Assisted Software Engineering / AI Coding Assistants",
+  "description": "Pilot benchmark for evaluating claim-citation alignment in Reliable Research.",
+  "questions": [
+    {
+      "question_id": "Q001",
+      "topic": "coding_productivity",
+      "question": "Do AI coding assistants reduce software-development task completion time?",
+      "split": "dev"
+    },
+    {
+      "question_id": "Q002",
+      "topic": "code_quality",
+      "question": "Do AI coding assistants improve code quality?",
+      "split": "dev"
+    },
+    {
+      "question_id": "Q003",
+      "topic": "security",
+      "question": "Do AI coding assistants introduce security vulnerabilities into generated or modified code?",
+      "split": "dev"
+    },
+    {
+      "question_id": "Q004",
+      "topic": "maintainability",
+      "question": "How do AI coding assistants affect software maintainability?",
+      "split": "dev"
+    },
+    {
+      "question_id": "Q005",
+      "topic": "developer_experience",
+      "question": "Are AI coding assistants more helpful to novice developers than to experienced developers?",
+      "split": "dev"
+    },
+    {
+      "question_id": "Q006",
+      "topic": "debugging",
+      "question": "How do AI coding assistants affect developer debugging performance?",
+      "split": "dev"
+    },
+    {
+      "question_id": "Q007",
+      "topic": "testing",
+      "question": "How do AI coding assistants affect software testing productivity and effectiveness?",
+      "split": "held_out"
+    },
+    {
+      "question_id": "Q008",
+      "topic": "technical_debt",
+      "question": "How do AI coding assistants affect software technical debt?",
+      "split": "held_out"
+    }
+  ]
+}

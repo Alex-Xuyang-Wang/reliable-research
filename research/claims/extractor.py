@@ -34,6 +34,7 @@ _VERB_RE = re.compile(
     r"can|could|may|might|will|would|shows?|showed|finds?|found|"
     r"reports?|reported|indicates?|indicated|suggests?|suggested|"
     r"increases?|increased|decreases?|decreased|improves?|improved|"
+    r"achieves?|achieved|"
     r"reduces?|reduced|contains?|contained|introduces?|introduced|"
     r"completes?|completed|uses?|used|produces?|produced|"
     r"outperforms?|outperformed|affects?|affected|requires?|required|"
@@ -42,6 +43,7 @@ _VERB_RE = re.compile(
 )
 
 _SPLIT_CONNECTOR_RE = re.compile(r",\s+(?:and|but|while|whereas)\s+", re.IGNORECASE)
+_SHARED_SUBJECT_CONNECTOR_RE = re.compile(r"\s+and\s+", re.IGNORECASE)
 
 
 def extract_citations(text: str) -> list[str]:
@@ -103,7 +105,9 @@ def _looks_factual(text: str) -> bool:
         return False
 
     words = re.findall(r"\b\w+\b", stripped)
-    if len(words) < 4 and not _VERB_RE.search(stripped):
+    has_verb = bool(_VERB_RE.search(stripped))
+
+    if not has_verb:
         return False
 
     return True
@@ -116,6 +120,33 @@ def _has_clause_shape(text: str) -> bool:
         return False
     return bool(_VERB_RE.search(cleaned))
 
+def _split_shared_subject_clause(clause: str) -> list[str] | None:
+    """Split 'subject verb ... and verb ...' while preserving the shared subject."""
+    for match in _SHARED_SUBJECT_CONNECTOR_RE.finditer(clause):
+        left = clause[: match.start()].strip()
+        right = clause[match.end() :].strip()
+
+        if not _has_clause_shape(left):
+            continue
+
+        right_cleaned = _without_citations(right)
+
+        # Only split when the right side starts with a recognized verb.
+        if not _VERB_RE.match(right_cleaned):
+            continue
+
+        left_cleaned = _without_citations(left)
+        first_verb = _VERB_RE.search(left_cleaned)
+        if not first_verb:
+            continue
+
+        subject = left_cleaned[: first_verb.start()].strip()
+        if not subject:
+            continue
+
+        return [left, f"{subject} {right}"]
+
+    return None
 
 def split_atomic_clauses(sentence: str) -> list[str]:
     """Conservatively split a sentence when both conjunction sides are clauses."""
@@ -146,7 +177,15 @@ def split_atomic_clauses(sentence: str) -> list[str]:
                 next_clauses.append(clause)
         clauses = next_clauses
 
-    return clauses
+    shared_subject_clauses: list[str] = []
+    for clause in clauses:
+        split_clause = _split_shared_subject_clause(clause)
+        if split_clause:
+            shared_subject_clauses.extend(split_clause)
+        else:
+            shared_subject_clauses.append(clause)
+
+    return shared_subject_clauses
 
 
 def _normalize_claim_text(clause: str) -> str:

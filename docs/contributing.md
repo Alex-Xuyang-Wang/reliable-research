@@ -1,39 +1,208 @@
-## Contributing
+# Contributing to Reliable Research
 
-We welcome community contributions through the [openai/codex issue tracker](https://github.com/openai/codex/issues). Bug reports, root-cause analyses, and feature requests help us understand what matters most and improve Codex.
+Reliable Research is currently developed as an academic research project built on top of OpenAI Codex.
 
-**We do not accept external code contributions or pull requests.**
+This document describes the workflow for project-team contributions and research changes in this fork.
 
-### Why we do not accept external code contributions
+## Development Workflow
 
-Effective changes to Codex require architectural context, an understanding of system-level constraints, and visibility into the project's roadmap. External pull requests often focus on issues that are lower priority, affect a small number of users, or need substantial changes to fit the broader system. Reviewing and iterating on those changes can take more time than implementing a fix directly, diverting attention from higher-priority work.
+Use feature branches and pull requests for project changes.
 
-Community expertise is most valuable when shared through detailed bug reports, reproduction steps, logs, root-cause analysis, and design discussions in issues. Understanding the problem, identifying the right solution, and prioritizing the work are typically the hard parts; implementation is comparatively straightforward with the help of Codex itself.
+Start from the latest `main`:
 
-For these reasons, we focus community contributions on issue reports, analysis, and feedback, while the Codex team handles code changes.
+```bash
+git fetch origin
+git switch main
+git pull --ff-only origin main
+```
 
-### Reporting bugs
+Create a focused feature branch:
 
-Before opening a new issue, search the issue tracker to see whether the problem has already been reported. If it has, add any new information to the existing issue.
+```bash
+git switch -c feat/<short-description>
+```
 
-When reporting a bug, include as much relevant detail as possible:
+Examples:
 
-- Clear, detailed steps to reproduce the problem.
-- Expected and actual behavior.
-- Your Codex version, operating system, and other relevant environment details.
-- Logs, error messages, or other diagnostic information, with sensitive information removed.
-- Root-cause analysis, technical observations, or potential approaches to a fix, if available.
+```text
+feat/baseline-generation
+feat/atomic-claim-extractor
+feat/claim-extractor-improvements
+```
 
-### Requesting features
+After implementation and testing:
 
-Open a feature request in the issue tracker, or upvote an existing request that describes the same need. Explain your use case, the behavior you would like, and why it would improve your workflow.
+```bash
+git status
+git diff
+git add <files>
+git commit -m "feat: describe the change"
+git push -u origin HEAD
+```
 
-### Community values
+Then open a pull request into `main`.
 
-- **Be kind and inclusive.** Treat others with respect; we follow the [Contributor Covenant](https://www.contributor-covenant.org/).
-- **Assume good intent.** Written communication is hard, so err on the side of generosity.
-- **Share what you learn.** Reproduction details, logs, and analysis help the entire community.
+## Pull Request Scope
 
-### Security
+Keep each pull request focused on one research or engineering change.
 
-If you discover a security vulnerability, follow the [security policy](../SECURITY.md) instead of reporting it in a public issue.
+Good examples:
+
+```text
+Add Atomic Claim Extraction
+Improve Atomic Claim Extraction heuristics
+Add Baseline Research Generation
+```
+
+Avoid mixing unrelated work such as baseline generation, claim verification, UI changes, and documentation cleanup into a single pull request.
+
+A pull request should explain:
+
+- what changed;
+- why the change is needed;
+- which files or pipeline stage it affects;
+- how it was tested;
+- any known limitations.
+
+## Testing
+
+Run the tests relevant to your change before opening a pull request.
+
+For the current Atomic Claim Extractor:
+
+```bash
+PYTHONPATH=. python3 -m unittest tests.test_claim_extractor -v
+```
+
+You can also verify the Python files compile:
+
+```bash
+python3 -m py_compile research/claims/schemas.py
+python3 -m py_compile research/claims/extractor.py
+```
+
+For runner changes, test the specific benchmark question or runner path that your pull request modifies.
+
+Example:
+
+```bash
+python3 -m research.runner.batch_runner --question-id Q001
+```
+
+Do not claim a run succeeded unless the expected output was actually produced and inspected.
+
+## Research Benchmark Rules
+
+The benchmark is stored in:
+
+```text
+data/questions/questions_v0.1.json
+```
+
+Current split policy:
+
+```text
+Q001–Q006  dev
+Q007–Q008  held_out
+```
+
+For the current Pre2 pilot, use:
+
+```text
+Q001
+Q002
+```
+
+Do not use `Q007` or `Q008` for prompt tuning, heuristic tuning, or development-time debugging. They are reserved for later held-out evaluation.
+
+## Research Integrity
+
+Do not fabricate or pre-fill evaluation results.
+
+Metrics such as:
+
+```text
+Human factual claims
+Correctly extracted claims
+Missed claims
+Incorrect split / merged claims
+Citation association accuracy
+```
+
+must come from actual generated reports and human review.
+
+When a real failure is found:
+
+```text
+Observed failure
+      ↓
+Add regression test
+      ↓
+Modify implementation
+      ↓
+Re-run evaluation
+      ↓
+Record the result
+```
+
+This is preferred over adding heuristics without a concrete observed failure.
+
+## Baseline Outputs
+
+Baseline reports should represent the behavior of the current unverified research pipeline.
+
+Do not manually repair citations, rewrite factual claims, or insert evidence before evaluation. The purpose of the baseline is to preserve the system's original output so that later modifications can be compared against it.
+
+Generated outputs should use stable, documented paths so downstream stages can consume them reproducibly.
+
+## Run Artifacts
+
+The Python runner stores run artifacts under:
+
+```text
+data/runs/<run_id>/
+```
+
+Do not silently modify run artifacts after a completed experiment.
+
+If a run must be repeated, create a new run and preserve the relevant metadata.
+
+## Code Style
+
+For project-specific Python code:
+
+- keep modules small and focused;
+- prefer the Python standard library when practical;
+- use type hints;
+- add docstrings where behavior is not obvious;
+- keep command-line workflows reproducible;
+- avoid unnecessary dependencies for simple processing;
+- add tests for important edge cases and regressions.
+
+## Commit Messages
+
+Use short, descriptive commit messages.
+
+Examples:
+
+```text
+feat: add atomic claim extraction
+feat: add baseline research generation
+fix: preserve shared subject in compound claims
+test: add noun coordination regression case
+docs: update Reliable Research documentation
+```
+
+## Upstream Codex Code
+
+Reliable Research is a fork of OpenAI Codex.
+
+When working on project-specific research functionality, prefer adding isolated research modules rather than making unnecessary changes to upstream Codex internals.
+
+If an issue belongs to the upstream Codex project rather than Reliable Research modifications, consult the upstream repository and documentation.
+
+## Security
+
+For security issues, follow the repository's [Security Policy](../SECURITY.md).
+
+Do not include credentials, API keys, private data, or sensitive logs in commits, pull requests, or benchmark artifacts.

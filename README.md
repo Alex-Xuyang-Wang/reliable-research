@@ -1,81 +1,228 @@
-<p align="center"><strong>Codex CLI</strong> is a coding agent from OpenAI that runs locally on your computer.
-<p align="center">
-  <img src="https://github.com/openai/codex/blob/main/.github/codex-cli-splash.png" alt="Codex CLI splash" width="80%" />
-</p>
-</br>
-If you want Codex in your code editor (VS Code, Cursor, Windsurf), <a href="https://developers.openai.com/codex/ide">install in your IDE.</a>
-</br>If you want the desktop app experience, run <code>codex app</code> or visit <a href="https://chatgpt.com/codex?app-landing-page=true">the Codex App page</a>.
-</br>If you are looking for the <em>cloud-based agent</em> from OpenAI, <strong>Codex Web</strong>, go to <a href="https://chatgpt.com/codex">chatgpt.com/codex</a>.</p>
+# Reliable Research
 
----
+**Reliable Research** is an academic research-agent prototype built on top of [OpenAI Codex](https://github.com/openai/codex).
 
-## Quickstart
+The project studies how to make automatically generated research reports more reliable, with a current focus on **claim–citation alignment** and **claim-level verification**.
 
-### Installing and running Codex CLI
+## Research Direction
 
-Run the following on Mac or Linux to install Codex CLI:
+Our current pilot domain is:
 
-```shell
-curl -fsSL https://chatgpt.com/codex/install.sh | sh
+> **AI-Assisted Software Engineering / AI Coding Assistants**
+
+The benchmark is designed to study questions such as:
+
+- whether AI coding assistants reduce software-development task completion time;
+- whether AI coding assistants improve code quality;
+- how they affect security, maintainability, developer experience, debugging, testing, and technical debt.
+
+The core research question for Reliable Research is not whether AI coding assistants are simply “good” or “bad.” Instead, we study whether factual claims produced by a research agent are actually supported by the citations and evidence attached to them, and how the research pipeline can be modified to improve that reliability.
+
+## Project Pipeline
+
+```text
+Research Question
+      ↓
+Baseline Research Generation
+      ↓
+Research Report
+      ↓
+Atomic Claim Extraction
+      ↓
+Structured Claim JSON
+      ↓
+Evidence / Citation Resolution
+      ↓
+Claim Verification
+      ↓
+Revision / Final Report
 ```
 
-Run the following on Windows to install Codex CLI:
+The current development work focuses on the early stages of this pipeline so that later verification experiments have reproducible inputs.
 
-```shell
-powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
+## Current Status
+
+### Benchmark v0.1
+
+The benchmark is stored in:
+
+```text
+data/questions/questions_v0.1.json
 ```
 
-The standalone installers download from `https://releases.openai.com/codex` by default and fall back to GitHub Releases if a metadata or asset download is unavailable. To force GitHub Releases, set `CODEX_INSTALLER_USE_RELEASES_OPENAI_COM` to `false` (`0` and `no` are also accepted):
+It currently contains eight questions in the domain of AI-assisted software engineering:
 
-```shell
-curl -fsSL https://chatgpt.com/codex/install.sh | CODEX_INSTALLER_USE_RELEASES_OPENAI_COM=false sh
+- `Q001`–`Q006`: development questions
+- `Q007`–`Q008`: held-out questions reserved for later evaluation
+
+The current Pre2 pilot uses `Q001` and `Q002`. The held-out questions should not be used for development-time tuning.
+
+### Python Runner
+
+`research/runner/codex_runner.py` provides a Python wrapper around the Reliable Research launcher.
+
+Each run records artifacts such as:
+
+```text
+data/runs/<run_id>/
+├── prompt.txt
+├── final_message.txt
+├── events.jsonl
+├── metadata.json
+└── stderr.txt
 ```
 
-```powershell
-$env:CODEX_INSTALLER_USE_RELEASES_OPENAI_COM='false'; irm https://chatgpt.com/codex/install.ps1 | iex
+The metadata includes the run ID, question ID, Git branch/commit information, timing, return code, event counts, warnings/errors, and usage information.
+
+### Atomic Claim Extraction
+
+The current Atomic Claim Extractor is implemented in:
+
+```text
+research/claims/
+├── __init__.py
+├── extractor.py
+└── schemas.py
 ```
 
-Codex CLI can also be installed via the following package managers:
+It converts research-report text into structured factual claims such as:
 
-```shell
-# Install using npm
-npm install -g @openai/codex
+```json
+{
+  "claim_id": "C001",
+  "claim": "Developers using an AI coding assistant completed tasks 30% faster.",
+  "citations": ["[1]"],
+  "source_sentence": "Developers using an AI coding assistant completed tasks 30% faster, and generated code contained more security weaknesses [1]."
+}
 ```
 
-```shell
-# Install using Homebrew
-brew install --cask codex
+The extractor currently includes logic for:
+
+- filtering recommendation-style and heading-like non-factual text;
+- splitting selected compound factual claims;
+- preserving shared subjects when splitting compound claims;
+- retaining citation associations;
+- avoiding selected noun-coordination over-splitting cases;
+- producing stable claim IDs and machine-readable JSON.
+
+## Repository Structure
+
+Relevant research files currently include:
+
+```text
+data/
+├── questions/
+│   └── questions_v0.1.json
+└── runs/
+
+research/
+├── claims/
+│   ├── __init__.py
+│   ├── extractor.py
+│   └── schemas.py
+└── runner/
+    ├── batch_runner.py
+    └── codex_runner.py
+
+tests/
+├── fixtures/
+│   └── sample_research_report.md
+└── test_claim_extractor.py
 ```
 
-Then simply run `codex` to get started.
+This repository also contains the upstream Codex codebase from which Reliable Research is derived.
 
-<details>
-<summary>You can also go to the <a href="https://github.com/openai/codex/releases/latest">latest GitHub Release</a> and download the appropriate binary for your platform.</summary>
+## Running the Current Research Components
 
-Each GitHub Release contains many executables, but in practice, you likely want one of these:
+### Inspect benchmark questions
 
-- macOS
-  - Apple Silicon/arm64: `codex-aarch64-apple-darwin.tar.gz`
-  - x86_64 (older Mac hardware): `codex-x86_64-apple-darwin.tar.gz`
-- Linux
-  - x86_64: `codex-x86_64-unknown-linux-musl.tar.gz`
-  - arm64: `codex-aarch64-unknown-linux-musl.tar.gz`
+Run one benchmark question:
 
-Each archive contains a single entry with the platform baked into the name (e.g., `codex-x86_64-unknown-linux-musl`), so you likely want to rename it to `codex` after extracting it.
+```bash
+python3 -m research.runner.batch_runner --question-id Q001
+```
 
-</details>
+Run the development split:
 
-### Using Codex with your ChatGPT plan
+```bash
+python3 -m research.runner.batch_runner --split dev
+```
 
-Run `codex` and select **Sign in with ChatGPT**. We recommend signing into your ChatGPT account to use Codex as part of your Plus, Pro, Business, Edu, or Enterprise plan. [Learn more about what's included in your ChatGPT plan](https://help.openai.com/en/articles/11369540-codex-in-chatgpt).
+At the current stage, `batch_runner.py` selects and prints benchmark questions. Baseline report generation is being integrated as a separate development step.
 
-You can also use Codex with an API key, but this requires [additional setup](https://developers.openai.com/codex/auth#sign-in-with-an-api-key).
+### Run the Atomic Claim Extractor
 
-## Docs
+Given a Markdown or text research report:
 
-- [**Codex Documentation**](https://developers.openai.com/codex)
-- [**Contributing**](./docs/contributing.md)
-- [**Installing & building**](./docs/install.md)
-- [**Open source fund**](./docs/open-source-fund.md)
+```bash
+PYTHONPATH=. python3 -m research.claims.extractor \
+  path/to/report.md \
+  --report-id Q001 \
+  --output path/to/claims.json
+```
 
-This repository is licensed under the [Apache-2.0 License](LICENSE).
+### Run claim-extractor tests
+
+```bash
+PYTHONPATH=. python3 -m unittest tests.test_claim_extractor -v
+```
+
+## Evaluation Plan
+
+The current evaluation workflow is:
+
+```text
+Q001 / Q002 baseline reports
+        ↓
+Atomic Claim Extraction
+        ↓
+Structured claims
+        ↓
+Human pilot on approximately 20–30 claims
+        ↓
+Error analysis
+        ↓
+Evidence table
+```
+
+The human pilot records issues such as:
+
+- missed factual claims;
+- false positives;
+- incorrect splitting or merging;
+- over-splitting;
+- citation-association errors.
+
+Evaluation numbers should come from real runs and human review rather than being pre-filled or estimated.
+
+## Development Principles
+
+Reliable Research uses a few simple rules to keep the experiment reproducible:
+
+- use fixed benchmark questions;
+- keep development and held-out questions separate;
+- preserve run artifacts and Git metadata;
+- make research-pipeline changes through focused feature branches and pull requests;
+- add regression tests when a concrete failure is found;
+- avoid manually correcting baseline outputs before evaluation.
+
+See [Contributing](docs/contributing.md) for the development workflow.
+
+## Upstream Project
+
+Reliable Research is derived from:
+
+**OpenAI Codex**  
+https://github.com/openai/codex
+
+The upstream Codex code, notices, and applicable attribution are retained in this repository.
+
+## License
+
+This repository retains the upstream [Apache License 2.0](LICENSE).
+
+See [NOTICE](NOTICE) for attribution information.
+
+## Project Status
+
+Reliable Research is an academic research prototype. It is under active development and is not intended for production deployment.

@@ -1,7 +1,12 @@
+import argparse
 import csv
 from pathlib import Path
 
-path = Path("data/evaluation/pre2_claim_pilot_xuyang.csv")
+parser = argparse.ArgumentParser()
+parser.add_argument("--annotator", choices=["xuyang", "jialiang"], required=True)
+args = parser.parse_args()
+
+path = Path(f"data/evaluation/pre2_claim_pilot_{args.annotator}.csv")
 
 ERROR_TYPES = [
     "NONE",

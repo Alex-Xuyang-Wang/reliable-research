@@ -1,0 +1,9 @@
+report_id,missed_id,source_text,should_exist,notes
+Q001,M001,"The evidence supports benefits that depend on the task, developer, and tool—not a single general percentage improvement.",YES,Evidence-synthesis claim present in the report but absent from extracted claims.
+Q001,M002,The time estimate conditions on completion.,YES,Study limitation present in the Peng et al. table row but absent from extracted claims.
+Q001,M003,"Cui et al. pooled randomized trials involving 4,867 developers at Microsoft, Accenture, and another large company.",YES,Study design and sample-size claim is present in the report but absent from extracted claims.
+Q001,M004,"The studies differ too much in tasks, participants, tools, and outcome measures to justify averaging their headline percentages.",YES,Evidence-synthesis claim in the conclusion was not extracted.
+Q002,M005,Recent observational evidence also raises concerns about growing complexity.,YES,Evidence-synthesis claim present in the opening paragraph but absent from extracted claims.
+Q002,M006,GitHub’s randomized trial involved 202 experienced developers implementing web-server API endpoints.,YES,Study design and sample-size claim is present in the report but absent from extracted claims.
+Q002,M007,He and colleagues compared Cursor-adopting open-source projects with matched controls using a difference-in-differences design.,YES,Repository-level study design claim is present in the report but absent from extracted claims.
+Q002,M008,The nonrandomized design leaves greater uncertainty about causation than a controlled trial.,YES,Study-design limitation was omitted when the source sentence was split.

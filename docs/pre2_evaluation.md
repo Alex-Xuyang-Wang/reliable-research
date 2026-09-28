@@ -67,22 +67,65 @@ The human pilot identified several recurring extractor failure modes:
 - **Citation association failures:** 13 of the 21 factual pilot claims did not retain or correctly associate an applicable citation. Observed cases included paragraph-level citations, table-row citations, and the `[1–5]` citation range.
 - **Formatting contamination:** 22 of the 24 pilot claims retained Markdown or structural artifacts, including emphasis markers, empty Markdown links, table pipes, section headings, and reference formatting.
 
-These failures are documented before any extractor modification. Confirmed failures will be converted into regression tests before implementation changes are made.
+These failures were documented before any extractor modification. Confirmed failures were then converted into regression tests before implementation changes were made.
 
 ## 6. Regression Fixes
 
-TBD.
+Confirmed extractor failures were converted into regression tests before implementation changes were made. Each new regression test was first confirmed to fail against the current extractor, then the smallest targeted fix was applied.
 
-If no confirmed extractor failure requires a code change, record that no extractor modification was necessary.
+The fixes addressed the following failure classes:
+
+- **Missed factual claims:** expanded factual-verb coverage for confirmed missed statements such as `involved`, `compared`, `leaves`, `raises`, `supports`, `conditions`, `provide`, `pooled`, `remains`, and `differ`.
+- **Citation parsing:** added support for numeric citation ranges such as `[1–5]`.
+- **Citation association:** propagated trailing paragraph citations to earlier factual sentences in the same paragraph and propagated citations across adjacent factual cells within the same Markdown table row.
+- **Semantic splitting:** fixed a shared-subject split case in which an embedded subject was incorrectly replaced by the matrix-clause subject.
+- **Sentence boundaries:** preserved sentence boundaries when punctuation is followed by closing Markdown emphasis markers such as `**`.
+- **Reference contamination:** stopped claim extraction when the report reaches the References section.
+- **Markdown normalization:** removed bold and italic emphasis markers, empty Markdown citation-link shells, and inline bold section headings from extracted claim text.
+- **Table handling:** treated Markdown table pipes as cell boundaries, removed table markers from claims, and prevented adjacent cells from being merged into one claim.
+
+The regression process was intentionally limited to failures confirmed in Q001 and Q002. Held-out benchmark reports were not used to design these fixes.
 
 ## 7. Final Test Results
 
-TBD after evaluation and any justified regression fixes.
+After the regression fixes, the complete local test suite passed:
+
+- **31 / 31 tests passed**
+- `git diff --check` reported no whitespace errors.
+
+The claim extractor was then re-run on the original Q001 and Q002 baseline reports without overwriting the tracked baseline claim files.
+
+| Metric | Q001 | Q002 | Combined |
+|---|---:|---:|---:|
+| Extracted claims before fixes | 22 | 24 | 46 |
+| Extracted claims after fixes | 30 | 28 | 58 |
+| Confirmed report-level misses recovered | 6 / 6 | 4 / 4 | 10 / 10 |
+| Recovered misses with citation association | 6 / 6 | 4 / 4 | 10 / 10 |
+| Obvious Markdown artifacts in rerun | 0 | 0 | 0 |
+| Obvious multi-sentence merged claims in rerun | 0 | 0 | 0 |
+
+The increase from 46 to 58 extracted claims is reported only as an output-count change. It should not be interpreted as a percentage improvement in extraction quality.
+
+The stronger before/after evidence is that all 10 report-level claims previously confirmed as missed were recovered in the rerun, and every recovered claim had at least one associated citation.
+
+Automated post-fix scans also found no remaining obvious Markdown artifacts or obvious cases in which two complete sentences were merged into one extracted claim in Q001 or Q002.
 
 ## 8. Limitations
 
-TBD after completing the Q001/Q002 pilot.
+This evaluation has several important limitations:
+
+- Only Q001 and Q002 were used for the Phase 2 pilot and regression analysis.
+- Only 24 of the original 46 extracted claims were manually annotated at the claim level, so an exact full-report precision or recall value is not reported.
+- The 10 report-level missed claims were manually identified from the complete Q001 and Q002 reports, but this does not guarantee that every possible missed claim was found.
+- The post-fix Markdown-artifact and multi-sentence-merge checks are targeted heuristic scans rather than complete manual re-annotation of all 58 post-fix claims.
+- Exact-text before/after comparison is difficult because formatting cleanup and improved splitting can change claim text even when the underlying factual statement is the same.
+- The fixes were developed from confirmed Q001/Q002 failures and therefore should not be treated as evidence of generalization to unseen reports.
+- Q007 and Q008 remain held out and were not used for debugging, heuristic development, or regression-fix design.
 
 ## 9. Phase 2 Conclusion
 
-TBD after final evidence numbers are available.
+The Q001/Q002 pilot identified substantial weaknesses in the original extractor, particularly in citation association, Markdown handling, sentence and clause splitting, and recall of factual statements.
+
+The regression process converted confirmed failures into tests before modifying the extractor. After the fixes, the full test suite passed, all 10 confirmed report-level missed claims were recovered, all 10 recovered claims were extracted with an associated citation, and targeted rerun checks found no obvious Markdown artifacts or multi-sentence merge failures in Q001 or Q002.
+
+These results provide evidence that the extractor is materially more reliable on the Phase 2 pilot reports. They do not establish full-report precision or recall, and they do not establish generalization to held-out reports. Those questions should be evaluated separately without using the held-out data for further tuning.

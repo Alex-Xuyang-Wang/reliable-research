@@ -8,8 +8,10 @@ from typing import Iterable
 from .schemas import AtomicClaim, ClaimExtractionResult
 
 
-_CITATION_RE = re.compile(r"\[(?:\d+|[A-Za-z][A-Za-z0-9_-]*)\]")
-_SENTENCE_BOUNDARY_RE = re.compile(r"(?<=[.!?])\s+(?=(?:[#>*-]*\s*)?[A-Z0-9])")
+_CITATION_RE = re.compile(r"\[(?:\d+(?:[-–]\d+)?|[A-Za-z][A-Za-z0-9_-]*)\]")
+_SENTENCE_BOUNDARY_RE = re.compile(
+    r"(?<=[.!?])(?:\*{1,2})?\s+(?=(?:[#>*-]*\s*)?[A-Z0-9])"
+)
 _MARKDOWN_PREFIX_RE = re.compile(r"^\s*(?:#{1,6}\s+|[-*+]\s+|\d+[.)]\s+|>\s*)")
 
 _NON_FACTUAL_PREFIXES = (
@@ -38,6 +40,9 @@ _VERB_RE = re.compile(
     r"reduces?|reduced|contains?|contained|introduces?|introduced|"
     r"completes?|completed|uses?|used|produces?|produced|"
     r"outperforms?|outperformed|affects?|affected|requires?|required|"
+    r"involves?|involved|compares?|compared|leaves?|raises?|raised|"
+    r"supports?|supported|conditions?|conditioned|provides?|provided|"
+    r"pools?|pooled|remains?|remained|differs?|differed|"
     r"correlates?|correlated|causes?|caused|leads?|led|evaluates?|evaluated)\b",
     re.IGNORECASE,
 )
@@ -75,15 +80,84 @@ def split_sentences(report: str) -> list[str]:
         raw_paragraph = paragraph.strip()
         if not raw_paragraph:
             continue
+
+        if re.fullmatch(
+            r"(?:#{1,6}\s*)?\*{0,2}references\*{0,2}\s*:?",
+            raw_paragraph,
+            re.IGNORECASE,
+        ):
+            break
+
         if raw_paragraph.startswith("#") or raw_paragraph.startswith("```"):
             continue
         paragraph = _strip_markdown_prefix(raw_paragraph)
         if not paragraph:
             continue
-        for sentence in _SENTENCE_BOUNDARY_RE.split(paragraph):
-            sentence = sentence.strip()
-            if sentence:
-                units.append(sentence)
+
+        is_table_row = (
+            raw_paragraph.startswith("|")
+            and raw_paragraph.endswith("|")
+        )
+        row_citations = (
+            extract_citations(raw_paragraph)
+            if is_table_row
+            else []
+        )
+
+        # Treat Markdown table pipes as cell boundaries rather than claim text.
+        paragraph = re.sub(r"^\s*\|\s*|\s*\|\s*$", "", paragraph)
+        paragraph = re.sub(r"\s+\|\s+", "\n", paragraph)
+
+        # Remove an inline bold section heading such as
+        # "**Security: conflicting evidence.**" while preserving the
+        # factual sentence that follows it.
+        paragraph = re.sub(
+            r"^\*\*[^*\n]+:[^*\n]+\.\*\*\s*",
+            "",
+            paragraph,
+        ).strip()
+
+        if not paragraph:
+            continue
+
+        for cell in paragraph.splitlines():
+            cell = cell.strip()
+            if not cell:
+                continue
+
+            cell_sentences = [
+                sentence.strip()
+                for sentence in _SENTENCE_BOUNDARY_RE.split(cell)
+                if sentence.strip()
+            ]
+            if not cell_sentences:
+                continue
+
+            # A citation attached to the final sentence of a paragraph/cell
+            # may support the preceding factual sentences in that same unit.
+            trailing_citations = extract_citations(cell_sentences[-1])
+            if trailing_citations:
+                citation_suffix = " ".join(trailing_citations)
+                cell_sentences = [
+                    sentence
+                    if extract_citations(sentence)
+                    else f"{sentence} {citation_suffix}"
+                    for sentence in cell_sentences
+                ]
+
+            # Citations elsewhere in the same Markdown table row may support
+            # adjacent factual cells in that row, but never cross into
+            # another row.
+            if row_citations:
+                citation_suffix = " ".join(row_citations)
+                cell_sentences = [
+                    sentence
+                    if extract_citations(sentence)
+                    else f"{sentence} {citation_suffix}"
+                    for sentence in cell_sentences
+                ]
+
+            units.extend(cell_sentences)
 
     return units
 
@@ -136,6 +210,23 @@ def _split_shared_subject_clause(clause: str) -> list[str] | None:
             continue
 
         left_cleaned = _without_citations(left)
+
+        # If the coordination occurs inside a "that" complement, preserve
+        # the embedded subject rather than reusing the matrix-clause subject.
+        that_match = re.search(r"\bthat\s+", left_cleaned, re.IGNORECASE)
+        if that_match:
+            matrix_prefix = left_cleaned[: that_match.end()].strip()
+            embedded = left_cleaned[that_match.end() :].strip()
+            embedded_verb = _VERB_RE.search(embedded)
+
+            if embedded_verb:
+                embedded_subject = embedded[: embedded_verb.start()].strip()
+                if embedded_subject:
+                    return [
+                        left,
+                        f"{matrix_prefix} {embedded_subject} {right}",
+                    ]
+
         first_verb = _VERB_RE.search(left_cleaned)
         if not first_verb:
             continue
@@ -190,6 +281,10 @@ def split_atomic_clauses(sentence: str) -> list[str]:
 
 def _normalize_claim_text(clause: str) -> str:
     text = _without_citations(clause)
+    text = re.sub(r"\s*\[\]\([^)]+\)", "", text)
+    text = re.sub(r"\*\*(.+?)\*\*", r"\1", text)
+    text = re.sub(r"\*([^*\n]+?)\*", r"\1", text)
+    text = text.replace("**", "")
     text = re.sub(r"^[,;:\-–—]+\s*", "", text).strip()
     if text:
         first_alpha = next((i for i, ch in enumerate(text) if ch.isalpha()), None)

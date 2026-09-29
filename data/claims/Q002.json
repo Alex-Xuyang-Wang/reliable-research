@@ -1,0 +1,162 @@
+{
+  "report_id": "Q002",
+  "claims": [
+    {
+      "claim_id": "C001",
+      "claim": "**AI coding assistants can improve code quality on specific tasks.",
+      "citations": [],
+      "source_sentence": "**AI coding assistants can improve code quality on specific tasks, but the evidence does not establish a consistent overall improvement.** Controlled studies report better functional correctness and readability in some settings, conflicting security outcomes, and no clear downstream maintainability benefit."
+    },
+    {
+      "claim_id": "C002",
+      "claim": "The evidence does not establish a consistent overall improvement.** Controlled studies report better functional correctness and readability in some settings, conflicting security outcomes, and no clear downstream maintainability benefit.",
+      "citations": [],
+      "source_sentence": "**AI coding assistants can improve code quality on specific tasks, but the evidence does not establish a consistent overall improvement.** Controlled studies report better functional correctness and readability in some settings, conflicting security outcomes, and no clear downstream maintainability benefit."
+    },
+    {
+      "claim_id": "C003",
+      "claim": "Developers assigned Copilot were reported to be 53.2% more likely to pass all ten unit tests—a relative increase, not a 53.2-percentage-point gain.",
+      "citations": [],
+      "source_sentence": "Developers assigned Copilot were reported to be 53.2% more likely to pass all ten unit tests—a relative increase, not a 53.2-percentage-point gain."
+    },
+    {
+      "claim_id": "C004",
+      "claim": "Blind reviews also reported improvements in readability (3.62%), reliability (2.94%), and maintainability (2.47%).",
+      "citations": [],
+      "source_sentence": "Blind reviews also reported improvements in readability (3.62%), reliability (2.94%), and maintainability (2.47%)."
+    },
+    {
+      "claim_id": "C005",
+      "claim": "These results support a benefit for the tested task, but the vendor-conducted experiment measured one exercise and reviewer judgments, rather than production defects or actual maintenance costs. [](https://github.blog/news-insights/research/does-github-copilot-improve-code-quality-heres-what-the-data-says/).",
+      "citations": [
+        "[1]"
+      ],
+      "source_sentence": "These results support a benefit for the tested task, but the vendor-conducted experiment measured one exercise and reviewer judgments, rather than production defects or actual maintenance costs. [[1]](https://github.blog/news-insights/research/does-github-copilot-improve-code-quality-heres-what-the-data-says/)"
+    },
+    {
+      "claim_id": "C006",
+      "claim": "**Security: conflicting evidence.** Perry and colleagues found that participants using a Codex-based assistant produced less secure solutions to security-related programming tasks.",
+      "citations": [],
+      "source_sentence": "**Security: conflicting evidence.** Perry and colleagues found that participants using a Codex-based assistant produced less secure solutions to security-related programming tasks and were more likely to believe their code was secure."
+    },
+    {
+      "claim_id": "C007",
+      "claim": "**Security: conflicting evidence.** Perry and colleagues were more likely to believe their code was secure.",
+      "citations": [],
+      "source_sentence": "**Security: conflicting evidence.** Perry and colleagues found that participants using a Codex-based assistant produced less secure solutions to security-related programming tasks and were more likely to believe their code was secure."
+    },
+    {
+      "claim_id": "C008",
+      "claim": "Conversely, Sandoval and colleagues’ study of 58 student programmers implementing a linked-list application in C found a comparatively small security impact: the assisted group’s critical-bug rate was no more than 10% above the control group’s.",
+      "citations": [],
+      "source_sentence": "Conversely, Sandoval and colleagues’ study of 58 student programmers implementing a linked-list application in C found a comparatively small security impact: the assisted group’s critical-bug rate was no more than 10% above the control group’s."
+    },
+    {
+      "claim_id": "C009",
+      "claim": "The latter result does not demonstrate improved security.",
+      "citations": [],
+      "source_sentence": "The latter result does not demonstrate improved security; together, the studies show that outcomes depend on the task and interaction setting."
+    },
+    {
+      "claim_id": "C010",
+      "claim": "Together, the studies show that outcomes depend on the task and interaction setting.",
+      "citations": [],
+      "source_sentence": "The latter result does not demonstrate improved security; together, the studies show that outcomes depend on the task and interaction setting."
+    },
+    {
+      "claim_id": "C011",
+      "claim": "Both evaluated early-generation assistants, limiting extrapolation to current tools. [](https://arxiv.org/abs/2211.03622) [](https://www.usenix.org/conference/usenixsecurity23/presentation/sandoval).",
+      "citations": [
+        "[2]",
+        "[3]"
+      ],
+      "source_sentence": "Both evaluated early-generation assistants, limiting extrapolation to current tools. [[2]](https://arxiv.org/abs/2211.03622) [[3]](https://www.usenix.org/conference/usenixsecurity23/presentation/sandoval)"
+    },
+    {
+      "claim_id": "C012",
+      "claim": "**Maintainability: no demonstrated improvement in a direct experiment.** A preregistered, two-phase study involving 151 participants, 95% professional developers, tested whether other developers could more easily extend AI-assisted code.",
+      "citations": [],
+      "source_sentence": "**Maintainability: no demonstrated improvement in a direct experiment.** A preregistered, two-phase study involving 151 participants, 95% professional developers, tested whether other developers could more easily extend AI-assisted code."
+    },
+    {
+      "claim_id": "C013",
+      "claim": "Its randomized second phase found no significant differences in subsequent completion time or code quality.",
+      "citations": [],
+      "source_sentence": "Its randomized second phase found no significant differences in subsequent completion time or code quality."
+    },
+    {
+      "claim_id": "C014",
+      "claim": "Bayesian analysis suggested any benefits were small and highly uncertain.",
+      "citations": [],
+      "source_sentence": "Bayesian analysis suggested any benefits were small and highly uncertain."
+    },
+    {
+      "claim_id": "C015",
+      "claim": "This is stronger evidence about actual maintenance work than immediate reviewer ratings, although it examined bounded Java tasks using tools available in late 2024.",
+      "citations": [],
+      "source_sentence": "This is stronger evidence about actual maintenance work than immediate reviewer ratings, although it examined bounded Java tasks using tools available in late 2024."
+    },
+    {
+      "claim_id": "C016",
+      "claim": "A null result is not proof of equivalence or long-term safety. [](https://link.springer.com/article/10.1007/s10664-026-10889-1).",
+      "citations": [
+        "[4]"
+      ],
+      "source_sentence": "A null result is not proof of equivalence or long-term safety. [[4]](https://link.springer.com/article/10.1007/s10664-026-10889-1)"
+    },
+    {
+      "claim_id": "C017",
+      "claim": "They found a temporary increase in development velocity alongside persistent increases in static-analysis warnings and code complexity.",
+      "citations": [],
+      "source_sentence": "They found a temporary increase in development velocity alongside persistent increases in static-analysis warnings and code complexity."
+    },
+    {
+      "claim_id": "C018",
+      "claim": "These are quality proxies, not confirmed production failures.",
+      "citations": [
+        "[5]"
+      ],
+      "source_sentence": "These are quality proxies, not confirmed production failures; the nonrandomized design also leaves greater uncertainty about causation than a controlled trial. [[5]](https://www.cs.cmu.edu/~ckaestne/pdf/msr26.pdf)"
+    },
+    {
+      "claim_id": "C019",
+      "claim": "The defensible interpretation is therefore **conditional improvement, not a general quality guarantee**.",
+      "citations": [],
+      "source_sentence": "The defensible interpretation is therefore **conditional improvement, not a general quality guarantee**."
+    },
+    {
+      "claim_id": "C020",
+      "claim": "Evidence that an assistant helps code pass tests does not establish that it also improves security or future maintenance.",
+      "citations": [],
+      "source_sentence": "Evidence that an assistant helps code pass tests does not establish that it also improves security or future maintenance."
+    },
+    {
+      "claim_id": "C021",
+      "claim": "Quality should be judged separately across those outcomes, rather than inferred from faster coding or greater output. [1–5].",
+      "citations": [],
+      "source_sentence": "Quality should be judged separately across those outcomes, rather than inferred from faster coding or greater output. [1–5]"
+    },
+    {
+      "claim_id": "C022",
+      "claim": "Here’s what the data says.*](https://github.blog/news-insights/research/does-github-copilot-improve-code-quality-heres-what-the-data-says/) GitHub.",
+      "citations": [],
+      "source_sentence": "Here’s what the data says.*](https://github.blog/news-insights/research/does-github-copilot-improve-code-quality-heres-what-the-data-says/) GitHub."
+    },
+    {
+      "claim_id": "C023",
+      "claim": "Perry, N., et al. (2023). [*Do Users Write More Insecure Code with AI Assistants?*](https://arxiv.org/abs/2211.03622) ACM CCS.",
+      "citations": [
+        "[2]"
+      ],
+      "source_sentence": "[2] Perry, N., et al. (2023). [*Do Users Write More Insecure Code with AI Assistants?*](https://arxiv.org/abs/2211.03622) ACM CCS."
+    },
+    {
+      "claim_id": "C024",
+      "claim": "He, H., et al. (2026). [*Speed at the Cost of Quality: How Cursor AI Increases Short-Term Velocity and Long-Term Complexity in Open-Source Projects.*](https://www.cs.cmu.edu/~ckaestne/pdf/msr26.pdf) MSR.",
+      "citations": [
+        "[5]"
+      ],
+      "source_sentence": "[5] He, H., et al. (2026). [*Speed at the Cost of Quality: How Cursor AI Increases Short-Term Velocity and Long-Term Complexity in Open-Source Projects.*](https://www.cs.cmu.edu/~ckaestne/pdf/msr26.pdf) MSR."
+    }
+  ]
+}

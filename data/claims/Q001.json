@@ -1,0 +1,152 @@
+{
+  "report_id": "Q001",
+  "claims": [
+    {
+      "claim_id": "C001",
+      "claim": "**Yes, AI coding assistants can reduce software-development task completion time.",
+      "citations": [],
+      "source_sentence": "**Yes, AI coding assistants can reduce software-development task completion time, but the effect is not universal.** Randomized studies show substantial time savings in some settings and a measurable slowdown in another."
+    },
+    {
+      "claim_id": "C002",
+      "claim": "The effect is not universal.** Randomized studies show substantial time savings in some settings and a measurable slowdown in another.",
+      "citations": [],
+      "source_sentence": "**Yes, AI coding assistants can reduce software-development task completion time, but the effect is not universal.** Randomized studies show substantial time savings in some settings and a measurable slowdown in another."
+    },
+    {
+      "claim_id": "C003",
+      "claim": "| **Peng et al. (2023):** 95 professional programmers randomized to use GitHub Copilot or work without it on a JavaScript HTTP-server task. | Among participants who finished, average completion time was **71 versus 161 minutes: a 55.8% reduction** (95% confidence interval: 21–89%).",
+      "citations": [],
+      "source_sentence": "| **Peng et al. (2023):** 95 professional programmers randomized to use GitHub Copilot or work without it on a JavaScript HTTP-server task. | Among participants who finished, average completion time was **71 versus 161 minutes: a 55.8% reduction** (95% confidence interval: 21–89%)."
+    },
+    {
+      "claim_id": "C004",
+      "claim": "Completion required passing automated tests. [](https://arxiv.org/abs/2302.06590) | One standardized task.",
+      "citations": [
+        "[1]"
+      ],
+      "source_sentence": "Completion required passing automated tests. [[1]](https://arxiv.org/abs/2302.06590) | One standardized task; the time estimate conditions on completion."
+    },
+    {
+      "claim_id": "C005",
+      "claim": "Broader code quality and long-term maintenance were not evaluated. |.",
+      "citations": [],
+      "source_sentence": "Broader code quality and long-term maintenance were not evaluated. |"
+    },
+    {
+      "claim_id": "C006",
+      "claim": "| **Paradis et al. (2024):** 96 Google engineers randomized to receive AI features for an enterprise coding task. | Mean completion times were **96 versus 114 minutes**.",
+      "citations": [],
+      "source_sentence": "| **Paradis et al. (2024):** 96 Google engineers randomized to receive AI features for an enterprise coding task. | Mean completion times were **96 versus 114 minutes**."
+    },
+    {
+      "claim_id": "C007",
+      "claim": "The preferred adjusted estimate was approximately **21% less time**, but its confidence interval included no effect (*p*=0.086).",
+      "citations": [
+        "[2]"
+      ],
+      "source_sentence": "The preferred adjusted estimate was approximately **21% less time**, but its confidence interval included no effect (*p*=0.086); the unadjusted comparison was statistically significant. [[2]](https://arxiv.org/abs/2410.12944) | A bounded experimental task using internal Google tools, limiting generalization. |"
+    },
+    {
+      "claim_id": "C008",
+      "claim": "The unadjusted comparison was statistically significant. [](https://arxiv.org/abs/2410.12944) | A bounded experimental task using internal Google tools, limiting generalization. |.",
+      "citations": [
+        "[2]"
+      ],
+      "source_sentence": "The preferred adjusted estimate was approximately **21% less time**, but its confidence interval included no effect (*p*=0.086); the unadjusted comparison was statistically significant. [[2]](https://arxiv.org/abs/2410.12944) | A bounded experimental task using internal Google tools, limiting generalization. |"
+    },
+    {
+      "claim_id": "C009",
+      "claim": "| **Becker et al., METR (2025):** 16 experienced open-source developers completed 246 real tasks in repositories they knew well.",
+      "citations": [],
+      "source_sentence": "| **Becker et al., METR (2025):** 16 experienced open-source developers completed 246 real tasks in repositories they knew well; tasks were randomized to allow or prohibit AI. | AI access **increased completion time by 19%**; the reported confidence interval was approximately 2–39% longer."
+    },
+    {
+      "claim_id": "C010",
+      "claim": "Tasks were randomized to allow or prohibit AI. | AI access **increased completion time by 19%**.",
+      "citations": [],
+      "source_sentence": "| **Becker et al., METR (2025):** 16 experienced open-source developers completed 246 real tasks in repositories they knew well; tasks were randomized to allow or prohibit AI. | AI access **increased completion time by 19%**; the reported confidence interval was approximately 2–39% longer."
+    },
+    {
+      "claim_id": "C011",
+      "claim": "The reported confidence interval was approximately 2–39% longer.",
+      "citations": [],
+      "source_sentence": "| **Becker et al., METR (2025):** 16 experienced open-source developers completed 246 real tasks in repositories they knew well; tasks were randomized to allow or prohibit AI. | AI access **increased completion time by 19%**; the reported confidence interval was approximately 2–39% longer."
+    },
+    {
+      "claim_id": "C012",
+      "claim": "Developers primarily used Cursor with Claude 3.5/3.7 Sonnet. [](https://arxiv.org/abs/2507.09089) [](https://metr.org/blog/2026-02-24-uplift-update/) | A small, specialized developer sample and a particular generation of tools. |.",
+      "citations": [
+        "[3]",
+        "[5]"
+      ],
+      "source_sentence": "Developers primarily used Cursor with Claude 3.5/3.7 Sonnet. [[3]](https://arxiv.org/abs/2507.09089) [[5]](https://metr.org/blog/2026-02-24-uplift-update/) | A small, specialized developer sample and a particular generation of tools. |"
+    },
+    {
+      "claim_id": "C013",
+      "claim": "Their preferred estimate was **26.08% more completed tasks per week** among developers induced to adopt Copilot (standard error: 10.3 percentage points).",
+      "citations": [],
+      "source_sentence": "Their preferred estimate was **26.08% more completed tasks per week** among developers induced to adopt Copilot (standard error: 10.3 percentage points)."
+    },
+    {
+      "claim_id": "C014",
+      "claim": "This measures throughput, so it should not be interpreted as a 26% reduction in individual task completion time.",
+      "citations": [],
+      "source_sentence": "This measures throughput, so it should not be interpreted as a 26% reduction in individual task completion time."
+    },
+    {
+      "claim_id": "C015",
+      "claim": "Individual experiments were noisy.",
+      "citations": [
+        "[4]"
+      ],
+      "source_sentence": "Individual experiments were noisy, and adoption was incomplete. [[4]](https://demirermert.github.io/Papers/Demirer_AI_productivity.pdf)"
+    },
+    {
+      "claim_id": "C016",
+      "claim": "Adoption was incomplete. [](https://demirermert.github.io/Papers/Demirer_AI_productivity.pdf).",
+      "citations": [
+        "[4]"
+      ],
+      "source_sentence": "Individual experiments were noisy, and adoption was incomplete. [[4]](https://demirermert.github.io/Papers/Demirer_AI_productivity.pdf)"
+    },
+    {
+      "claim_id": "C017",
+      "claim": "In February 2026, METR reported follow-up estimates suggesting **18% less time for returning developers and 4% less for newly recruited developers**, but both confidence intervals included no effect.",
+      "citations": [],
+      "source_sentence": "In February 2026, METR reported follow-up estimates suggesting **18% less time for returning developers and 4% less for newly recruited developers**, but both confidence intervals included no effect."
+    },
+    {
+      "claim_id": "C018",
+      "claim": "METR judged these estimates unreliable because of participant and task selection, alongside difficulties measuring time when developers used concurrent agents.",
+      "citations": [],
+      "source_sentence": "METR judged these estimates unreliable because of participant and task selection, alongside difficulties measuring time when developers used concurrent agents."
+    },
+    {
+      "claim_id": "C019",
+      "claim": "The follow-up therefore suggests possible improvement without establishing its magnitude. [](https://metr.org/blog/2026-02-24-uplift-update/).",
+      "citations": [
+        "[5]"
+      ],
+      "source_sentence": "The follow-up therefore suggests possible improvement without establishing its magnitude. [[5]](https://metr.org/blog/2026-02-24-uplift-update/)"
+    },
+    {
+      "claim_id": "C020",
+      "claim": "The defensible interpretation is that **AI assistance can materially shorten particular coding tasks.",
+      "citations": [],
+      "source_sentence": "The defensible interpretation is that **AI assistance can materially shorten particular coding tasks, while evidence does not establish a universal reduction in development time or total project delivery time**."
+    },
+    {
+      "claim_id": "C021",
+      "claim": "Evidence does not establish a universal reduction in development time or total project delivery time**.",
+      "citations": [],
+      "source_sentence": "The defensible interpretation is that **AI assistance can materially shorten particular coding tasks, while evidence does not establish a universal reduction in development time or total project delivery time**."
+    },
+    {
+      "claim_id": "C022",
+      "claim": "METR (2026). [*We are Changing our Developer Productivity Experiment Design.*](https://metr.org/blog/2026-02-24-uplift-update/).",
+      "citations": [],
+      "source_sentence": "METR (2026). [*We are Changing our Developer Productivity Experiment Design.*](https://metr.org/blog/2026-02-24-uplift-update/)"
+    }
+  ]
+}

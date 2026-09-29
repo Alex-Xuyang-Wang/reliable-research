@@ -1,0 +1,11 @@
+report_id,miss_id,claim_text,citations,notes
+Q001,Q001-MISS-001,"The evidence supports benefits that depend on the task, developer, and tool—not a single general percentage improvement.",[1]; [2]; [3],Report-level evidence-synthesis claim was not extracted.
+Q001,Q001-MISS-002,The time estimate conditions on completion.,[1],Methodological limitation in the original report was not extracted.
+Q001,Q001-MISS-003,Larger workplace experiments provide supporting—but indirect—evidence.,[4],Evidence-synthesis statement was not extracted.
+Q001,Q001-MISS-004,"Cui et al. pooled randomized trials involving 4,867 developers at Microsoft, Accenture, and another large company.",[4],Study population and design description were not extracted.
+Q001,Q001-MISS-005,More recent evidence remains uncertain.,[5],Report-level evidence-state statement was not extracted.
+Q001,Q001-MISS-006,"The studies differ too much in tasks, participants, tools, and outcome measures to justify averaging their headline percentages.",[1]; [2]; [3]; [4],Cross-study heterogeneity statement was not extracted.
+Q002,Q002-MISS-001,Recent observational evidence also raises concerns about growing complexity.,[1]; [2]; [3]; [4]; [5],Report-level synthesis statement was not extracted.
+Q002,Q002-MISS-002,GitHub’s randomized trial involved 202 experienced developers implementing web-server API endpoints.,[1],Study population and task description were not extracted.
+Q002,Q002-MISS-003,He and colleagues compared Cursor-adopting open-source projects with matched controls using a difference-in-differences design.,[5],Study design description was not extracted.
+Q002,Q002-MISS-004,The nonrandomized design leaves greater uncertainty about causation than a controlled trial.,[5],Methodological limitation was not extracted.

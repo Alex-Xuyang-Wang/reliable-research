@@ -4,105 +4,124 @@
 
 This rubric is used to manually evaluate atomic claims extracted from the Q001 and Q002 baseline research reports.
 
-The evaluation focuses on claim extraction quality, not whether the underlying research claim is scientifically true.
+The evaluation focuses on claim-extraction quality, not whether the underlying research claim is scientifically true.
+
+## Consensus Annotation Schema
+
+The consensus annotation file uses the following columns:
+
+- `report_id`
+- `claim_id`
+- `claim_text`
+- `citations`
+- `should_exist`
+- `split_correct`
+- `citation_correct`
+- `format_clean`
+- `error_type`
+- `notes`
+
+The first four columns identify the extracted item and its current citation output. The remaining fields contain the adjudicated evaluation labels.
 
 ## Annotation Fields
 
-### is_factual
+### should_exist
 
-Use `YES` when the extracted text makes a factual, externally verifiable statement.
+Use `YES` when the extracted item should exist as a factual, externally verifiable claim.
 
-Use `NO` for:
-- headings
-- recommendations
-- rhetorical statements
-- purely organizational text
-- non-factual commentary
+Use `NO` when the extracted item should not be treated as a factual claim, including cases such as:
 
-### correctly_extracted
+- reference entries,
+- headings,
+- recommendations,
+- organizational text,
+- non-factual commentary,
+- other structural or non-claim text.
 
-Use `YES` when:
-- the factual content is preserved,
-- the claim is sufficiently atomic,
-- no unrelated factual content is merged,
-- no necessary factual content is lost.
+### split_correct
 
-Use `NO` otherwise.
+Use `YES` when atomicity and semantic meaning are preserved.
+
+Use `NO` when:
+
+- multiple factual propositions are incorrectly merged,
+- a factual proposition is unnecessarily over-split,
+- the subject of the claim changes,
+- the extracted claim changes or loses the intended factual meaning.
+
+Use `NA` when `should_exist = NO`.
+
+Heading contamination, table contamination, or Markdown contamination does not by itself make `split_correct = NO`. Those are formatting or structural problems unless they also change atomicity or meaning.
+
+### citation_correct
+
+Use `YES` when an applicable citation from the original report is correctly retained and associated with the extracted claim.
+
+Use `NO` when the original report contains an applicable citation but the extractor:
+
+- loses the citation,
+- fails to parse the citation,
+- propagates the citation incorrectly,
+- associates the wrong citation with the claim.
+
+Use `NA` when no applicable citation exists in the original report for that item.
+
+An extracted value of `citations = []` does not automatically imply `citation_correct = NO`. The original report must be checked to determine whether a citation is actually applicable to the claim.
+
+### format_clean
+
+Use `YES` when the extracted claim text is clean enough to be passed directly to the verifier.
+
+Use `NO` when the claim still contains structural or formatting artifacts such as:
+
+- Markdown emphasis markers,
+- raw or empty Markdown links,
+- table pipes,
+- heading fragments,
+- reference formatting,
+- other structural artifacts that should not be part of the claim text.
 
 ### error_type
 
-Use one of:
+Use the error categories present in the consensus annotation file:
 
-- `MISS`
-- `FALSE_POSITIVE`
-- `OVER_SPLIT`
-- `UNDER_SPLIT`
-- `CITATION_ASSOCIATION_ERROR`
-- `MARKDOWN_CITATION_PARSE_ERROR`
-- `OTHER`
+- `NONE`
+- `CITATION_MISSING`
+- `MARKDOWN_ARTIFACT`
+- `REFERENCE_CONTAMINATION`
+- `MULTIPLE`
 
-Leave blank when no extraction error is present.
+Definitions:
 
-### citation_association_correct
+- `NONE`: no extraction error is assigned after adjudication.
+- `CITATION_MISSING`: an applicable citation from the original report was not correctly retained or associated.
+- `MARKDOWN_ARTIFACT`: Markdown or structural formatting remains in the extracted claim text.
+- `REFERENCE_CONTAMINATION`: reference-section or reference-entry content was incorrectly extracted as a claim.
+- `MULTIPLE`: more than one confirmed extraction problem applies to the same item.
 
-Use `YES` when the citation attached to the extracted claim matches the citation attached to that claim in the original report.
+Do not introduce additional `error_type` values during consensus annotation unless the schema is explicitly revised.
 
-Use `NO` when the citation is missing, incorrect, or associated with the wrong claim.
+### notes
 
-Use `NA` when no citation is expected.
+Use `notes` to record a short adjudication rationale.
 
-## Error Definitions
+The note should briefly explain why the final labels were chosen, especially when:
 
-### MISS
-
-A factual claim appears in the original report but is not extracted.
-
-For a missed claim, create a manual annotation ID such as:
-
-- `Q001-MISS-001`
-- `Q002-MISS-001`
-
-Record the missed factual statement in `claim_text`, set:
-
-- `is_factual` = `YES`
-- `correctly_extracted` = `NO`
-- `error_type` = `MISS`
-
-Preserve the citation from the original report in the `citation` field when one is present.
-
-### FALSE_POSITIVE
-
-Non-factual text is incorrectly extracted as a factual claim.
-
-### OVER_SPLIT
-
-A single factual claim is unnecessarily split into multiple claims.
-
-### UNDER_SPLIT
-
-Multiple independent factual claims remain merged into one extracted claim.
-
-### CITATION_ASSOCIATION_ERROR
-
-The extracted claim has an incorrect or missing citation association.
-
-### MARKDOWN_CITATION_PARSE_ERROR
-
-Markdown citation syntax contaminates, breaks, or prevents correct claim extraction.
-
-### OTHER
-
-Any confirmed extraction failure not covered by the categories above.
+- annotators originally disagreed,
+- citation scope required checking the original report,
+- a split or semantic-preservation issue was subtle,
+- multiple error types were present.
 
 ## Annotation Procedure
 
 For each extracted claim:
 
 1. Locate the corresponding text in the original report.
-2. Decide whether it is factual.
-3. Check whether the extracted claim preserves the intended factual meaning.
-4. Check whether it should be split or merged differently.
-5. Check citation association.
-6. Record any confirmed error and a short note.
+2. Decide whether the extracted item should exist as a factual claim.
+3. If it should exist, evaluate whether atomicity and semantic meaning are preserved.
+4. Check the citation scope in the original report and evaluate whether the applicable citation was retained and associated correctly.
+5. Check whether the extracted text is clean enough to feed directly into the verifier.
+6. Assign the applicable `error_type`.
+7. Record a short adjudication rationale in `notes`.
 
-Also review the original report directly for factual claims that were completely missed by the extractor.
+A separate report-level review of the original Q001 and Q002 reports is used to identify factual claims that were missed entirely by the extractor. Those missed claims are recorded separately and are not represented by adding a `MISS` value to the consensus CSV `error_type` field.

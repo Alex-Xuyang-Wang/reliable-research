@@ -119,6 +119,7 @@ This evaluation has several important limitations:
 - The 10 report-level missed claims were manually identified from the complete Q001 and Q002 reports, but this does not guarantee that every possible missed claim was found.
 - The post-fix Markdown-artifact and multi-sentence-merge checks are targeted heuristic scans rather than complete manual re-annotation of all 58 post-fix claims.
 - Exact-text before/after comparison is difficult because formatting cleanup and improved splitting can change claim text even when the underlying factual statement is the same.
+- Citation propagation is heuristic rather than a general citation-scope resolver. A trailing paragraph citation or a citation elsewhere in the same Markdown table row may not semantically support every nearby factual claim, so the current rule can potentially over-associate citations when the true citation scope is narrower. This should be evaluated separately in later citation-resolution or verification stages.
 - The fixes were developed from confirmed Q001/Q002 failures and therefore should not be treated as evidence of generalization to unseen reports.
 - Q007 and Q008 remain held out and were not used for debugging, heuristic development, or regression-fix design.
 
